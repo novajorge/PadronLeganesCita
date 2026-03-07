@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Consigue cita para el padrón de Leganés. Te avisamos automáticamente cuando haya citas disponibles.">
+    <title>Cita Previa Padrón Leganés - Consigue citas disponibles</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="8" fill="#0059A8"/>
+                    <path d="M8 12h16M8 16h12M8 20h14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span class="logo-text">Padrón Leganés</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-pattern"></div>
+        <div class="container hero-content">
+            <h1 class="hero-title">Consigue cita para el padrón de Leganés</h1>
+            <p class="hero-subtitle">Te avisamos automáticamente cuando haya citas disponibles en el servicio de padrón del Ayuntamiento de Leganés</p>
+            <a href="#registro" class="btn btn-secondary hero-cta">
+                Registrarme ahora
+                <svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="features" id="como-funciona">
+        <div class="container">
+            <h2 class="section-title">Cómo funciona</h2>
+            <p class="section-subtitle">En solo 3 pasosstart</p>
+
+            <div class="features-grid">
+                <!-- Step 1 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="24" cy="16" r="8" stroke="#0059A8" stroke-width="3"/>
+                            <path d="M12 36c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="#0059A8" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Regístrate</h3>
+                    <p class="feature-description">Ingresa tus datos de contacto y selecciona cómo quieres recibir las notificaciones</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="24" cy="24" r="18" stroke="#0059A8" stroke-width="3"/>
+                            <path d="M24 14v10l6 6" stroke="#0059A8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Nosotros vigilamos</h3>
+                    <p class="feature-description">Monitorizamos la web del ayuntamiento 24/7 buscando citas disponibles</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 20l8-4v8l-8-4z" stroke="#0059A8" stroke-width="3" stroke-linejoin="round"/>
+                            <path d="M16 24l8-4v8l-8-4z" stroke="#0059A8" stroke-width="3" stroke-linejoin="round"/>
+                            <path d="M24 28l8-4v8l-8-4z" stroke="#0059A8" stroke-width="3" stroke-linejoin="round"/>
+                            <path d="M32 32l8-4v8l-8-4z" stroke="#0059A8" stroke-width="3" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Recibe alertas</h3>
+                    <p class="feature-description">Te notificamos al instante por tu canal preferido cuando haya citas disponibles</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Form Section -->
+    <section class="registration" id="registro">
+        <div class="container">
+            <div class="registration-card">
+                <div class="registration-header">
+                    <h2 class="registration-title">Activar alertas</h2>
+                    <p class="registration-subtitle">Rellena el formulario y te avisaremos cuando haya citas</p>
+                </div>
+
+                <form id="registration-form" class="registration-form" novalidate>
+                    <!-- Nombre completo -->
+                    <div class="form-group">
+                        <label for="nombre" class="form-label">Nombre completo *</label>
+                        <input
+                            type="text"
+                            id="nombre"
+                            name="nombre"
+                            class="form-input"
+                            placeholder="Ej: Juan García López"
+                            required
+                            minlength="2"
+                            aria-describedby="nombre-error"
+                        >
+                        <span id="nombre-error" class="form-error" role="alert"></span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email *</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-input"
+                            placeholder="Ej: juan@ejemplo.com"
+                            required
+                            aria-describedby="email-error"
+                        >
+                        <span id="email-error" class="form-error" role="alert"></span>
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="form-group">
+                        <label for="telefono" class="form-label">Teléfono *</label>
+                        <input
+                            type="tel"
+                            id="telefono"
+                            name="telefono"
+                            class="form-input"
+                            placeholder="Ej: +34612345678"
+                            required
+                            pattern="^\+34[0-9]{9}$"
+                            aria-describedby="telefono-error"
+                        >
+                        <span id="telefono-error" class="form-error" role="alert"></span>
+                        <span class="form-hint">Formato español: +34 seguido de 9 dígitos</span>
+                    </div>
+
+                    <!-- Telegram Chat ID -->
+                    <div class="form-group">
+                        <label for="telegram" class="form-label">Telegram Chat ID <span class="optional">(opcional)</span></label>
+                        <div class="input-with-button">
+                            <input
+                                type="text"
+                                id="telegram"
+                                name="telegram"
+                                class="form-input"
+                                placeholder="Ej: 123456789"
+                                aria-describedby="telegram-error telegram-help"
+                            >
+                            <button type="button" class="btn btn-secondary btn-small" id="telegram-help-btn">
+                                ¿Cómo obtenerlo?
+                            </button>
+                        </div>
+                        <span id="telegram-error" class="form-error" role="alert"></span>
+                        <span id="telegram-help" class="form-hint">Solo necesario si quieres recibir notificaciones por Telegram</span>
+                    </div>
+
+                    <!-- Notification Channels -->
+                    <div class="form-group">
+                        <label class="form-label">Canales de notificación *</label>
+                        <div class="checkbox-group" role="group" aria-label="Selecciona al menos un canal de notificación">
+                            <!-- Email -->
+                            <label class="checkbox-item">
+                                <input
+                                    type="checkbox"
+                                    id="notif-email"
+                                    name="notification_channels"
+                                    value="email"
+                                    class="checkbox-input"
+                                    checked
+                                >
+                                <span class="checkbox-custom">
+                                    <svg class="checkbox-check" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                        <path d="M2 7l3 3 7-7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <span class="checkbox-label">
+                                    <svg class="checkbox-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                        <path d="M2 6l8 5 8-5" stroke="currentColor" stroke-width="1.5"/>
+                                    </svg>
+                                    Email
+                                </span>
+                            </label>
+
+                            <!-- Telegram -->
+                            <label class="checkbox_item">
+                                <input
+                                    type="checkbox"
+                                    id="notif-telegram"
+                                    name="notification_channels"
+                                    value="telegram"
+                                    class="checkbox-input"
+                                >
+                                <span class="checkbox-custom">
+                                    <svg class="checkbox-check" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                        <path d="M2 7l3 3 7-7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <span class="checkbox-label">
+                                    <svg class="checkbox-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M4.5 9.5l2.5 2.5 4-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M15.5 4.5c1.5-1 2.5-.5 2.5 1s-.5 2-2.5 3.5l-4 2.5-1.5-1 3-2.5" stroke="currentColor" stroke-width="1.5"/>
+                                    </svg>
+                                    Telegram
+                                </span>
+                            </label>
+
+                            <!-- WhatsApp -->
+                            <label class="checkbox_item">
+                                <input
+                                    type="checkbox"
+                                    id="notif-whatsapp"
+                                    name="notification_channels"
+                                    value="whatsapp"
+                                    class="checkbox-input"
+                                >
+                                <span class="checkbox-custom">
+                                    <svg class="checkbox-check" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                        <path d="M2 7l3 3 7-7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <span class="checkbox-label">
+                                    <svg class="checkbox-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M14 11.5c0-1.5-1-2.5-2.5-2.5-1 0-2 .5-2.5 1l-1 .5-1-1 .5-1.5c-.5-1-1-2-2-2.5 1.5-1.5 3.5-1.5 5 0 2 2 2.5 4 2.5 5.5 0 2-1.5 3.5-3.5 3.5-1 0-2-.5-3-1 1 0 2-.5 2.5-1h.5c1.5 0 3-1.5 3-3z" stroke="currentColor" stroke-width="1.5"/>
+                                    </svg>
+                                    WhatsApp
+                                </span>
+                            </label>
+                        </div>
+                        <span id="channels-error" class="form-error" role="alert"></span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary btn-full" id="submit-btn">
+                        <span class="btn-text">Registrarme</span>
+                        <span class="btn-loader">
+                            <svg class="spinner" width="20" height="20" viewBox="0 0 20 20">
+                                <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="40" stroke-dashoffset="10"/>
+                            </svg>
+                        </span>
+                    </button>
+                </form>
+
+                <!-- Success Message -->
+                <div id="success-message" class="success-message" role="status" aria-live="polite" hidden>
+                    <div class="success-icon">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                            <circle cx="32" cy="32" r="30" fill="#10B981"/>
+                            <path d="M20 32l8 8 16-16" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="success-title">¡Te has registrado correctamente!</h3>
+                    <p class="success-text">Recibirás notificaciones cuando haya citas disponibles para el padrón de Leganés.</p>
+                    <button type="button" class="btn btn-secondary" id="register-another">Registrar otro email</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <p class="footer-text">© 2024 Cita Previa Padrón Leganés. Todos los derechos reservados.</p>
+            <p class="footer-disclaimer">Este servicio no está afiliado al Ayuntamiento de Leganés.</p>
+        </div>
+    </footer>
+
+    <!-- Telegram Help Modal -->
+    <div id="telegram-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true" hidden>
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content">
+            <button class="modal-close" type="button" aria-label="Cerrar" data-close-modal>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <h3 id="modal-title" class="modal-title">¿Cómo obtener tu Chat ID de Telegram?</h3>
+            <div class="modal-body">
+                <ol class="modal-steps">
+                    <li>Abre Telegram y busca el bot <strong>@userinfobot</strong></li>
+                    <li>Inicia una conversación con el bot (/start)</li>
+                    <li>El bot te responderá con tu información, incluyendo tu Chat ID</li>
+                    <li>Copia el número que aparece como "ID"</li>
+                </ol>
+                <p class="modal-note">También puedes usar nuestro bot: <strong>@PedirCitaPadronBot</strong></p>
+                <a href="https://t.me/userinfobot" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full">
+                    Abrir @userinfobot
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
