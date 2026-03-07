@@ -1,18 +1,20 @@
-# Docker Compose para Coolify
+# Coolify Configuration
+# Este archivo permite desplegar directamente en Coolify
 
-version: '3.8'
+name: pedircitapadronleganes
+version: 1.0.0
 
 services:
   app:
-    build: .
+    image: pedircitapadronleganes:latest
     ports:
-      - "8000:8000"
+      - 8000:8000
     environment:
-      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
+      - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT:-587}
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
-      - FROM_EMAIL=${FROM_EMAIL:-noreply@citapadronleganes.es}
+      - FROM_EMAIL=${FROM_EMAIL}
       - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
       - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
       - TWILIO_PHONE_NUMBER=${TWILIO_PHONE_NUMBER}
@@ -20,6 +22,9 @@ services:
     volumes:
       - citas_data:/app/data
     restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      context: .
 
 volumes:
   citas_data:

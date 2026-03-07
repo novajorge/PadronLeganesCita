@@ -2,8 +2,12 @@ from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
+import os
 
-DATABASE_URL = "sqlite:///./citas.db"
+# Usar /app/data para persistencia en Docker/Coolify
+DB_DIR = os.getenv("DB_DIR", "/app/data")
+os.makedirs(DB_DIR, exist_ok=True)
+DATABASE_URL = f"sqlite:///{DB_DIR}/citas.db"
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
