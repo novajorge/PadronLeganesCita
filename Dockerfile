@@ -42,7 +42,7 @@ COPY frontend/ /app/static/
 RUN mkdir -p /app/data
 
 # Exponer puerto
-EXPOSE 8000
+EXPOSE 8001
 
 # Comando para iniciar
 CMD ["python", "main.py"]
