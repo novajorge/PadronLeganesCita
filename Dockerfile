@@ -28,11 +28,12 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalar Google Chrome
+# Instalar Google Chrome y Chromedriver
 RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
     && apt-get update \
-    && apt-get install -y google-chrome-stable \
+    && apt-get install -y google-chrome-stable chromium-driver \
+    && ln -s /usr/bin/chromium /usr/bin/google-chrome \
     && rm -rf /var/lib/apt/lists/*
 
 # Copiar requirements
