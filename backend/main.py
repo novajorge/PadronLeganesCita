@@ -14,8 +14,7 @@ from scheduler import iniciar_scheduler, detener_scheduler
 app = FastAPI(title="Cita Previa Padrón Leganés API")
 
 # Montar archivos estáticos del frontend
-static_dir = os.path.join(os.path.dirname(__file__), "..", "frontend")
-static_dir = os.path.normpath(static_dir)
+static_dir = os.path.join(os.path.dirname(__file__), "static")
 if os.path.exists(static_dir):
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
@@ -71,8 +70,7 @@ def shutdown_event():
 @app.get("/")
 def root():
     """Sirve la landing page"""
-    index_path = os.path.join(os.path.dirname(__file__), "..", "frontend", "index.html")
-    index_path = os.path.normpath(index_path)
+    index_path = os.path.join(os.path.dirname(__file__), "static", "index.html")
     if os.path.exists(index_path):
         return FileResponse(index_path)
     return {
