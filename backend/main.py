@@ -8,7 +8,7 @@ from typing import Optional, List
 from datetime import datetime
 import os
 
-from database import init_db, get_db, Usuario
+from database import init_db, get_db, Usuario, CitaDisponibilidad
 from scheduler import iniciar_scheduler, detener_scheduler
 
 app = FastAPI(title="Cita Previa Padrón Leganés API")
@@ -147,6 +147,45 @@ def eliminar_usuario(usuario_id: int, db: Session = Depends(get_db)):
     db.commit()
 
     return {"mensaje": "Usuario desactivado", "id": usuario_id}
+
+
+# Modelo de respuesta para citas
+class CitaResponse(BaseModel):
+    id: int
+    hay_citas: bool
+    detalles: Optional[str]
+    checked_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+@app.get("/api/citas", response_model=List[CitaResponse])
+def listar_citas(skip: int = 0, limit: int = 50, db: Session = Depends(get_db)):
+    """Lista el historial de citas encontradas"""
+    citas = db.query(CitaDisponibilidad).order_by(
+        CitaDisponibilidad.checked_at.desc()
+    ).offset(skip).limit(limit).all()
+    return citas
+
+
+@app.get("/api/citas/estadisticas")
+def obtener_estadisticas(db: Session = Depends(get_db)):
+    """Obtiene estadísticas de las comprobaciones"""
+    total = db.query(CitaDisponibilidad).count()
+    citas_encontradas = db.query(CitaDisponibilidad).filter(
+        CitaDisponibilidad.hay_citas == True
+    ).count()
+
+    ultima = db.query(CitaDisponibilidad).order_by(
+        CitaDisponibilidad.checked_at.desc()
+    ).first()
+
+    return {
+        "total_comprobaciones": total,
+        "citas_encontradas": citas_encontradas,
+        "ultima_actualizacion": ultima.checked_at if ultima else None
+    }
 
 
 if __name__ == "__main__":

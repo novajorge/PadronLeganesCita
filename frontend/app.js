@@ -6,8 +6,11 @@
 (function() {
     'use strict';
 
-    // Configuration
-    const API_URL = 'http://localhost:8000/api/usuarios';
+    // Configuration - auto-detect API URL
+    const API_BASE = window.location.origin;
+    const API_URL = API_BASE + '/api/usuarios';
+    const API_CITAS = API_BASE + '/api/citas';
+    const API_ESTADISTICAS = API_BASE + '/api/citas/estadisticas';
 
     // DOM Elements
     const form = document.getElementById('registration-form');
@@ -397,5 +400,114 @@
             }
         });
     });
+
+    // ========================================
+    // Calendario functionality
+    // ========================================
+
+    const calendarioList = document.getElementById('calendario-list');
+    const calendarioLoading = document.getElementById('calendario-loading');
+    const calendarioEmpty = document.getElementById('calendario-empty');
+    const citasList = document.getElementById('citas-list');
+    const refreshBtn = document.getElementById('refresh-calendar');
+
+    // Elements for stats
+    const totalChecksEl = document.getElementById('total-checks');
+    const citasEncontradasEl = document.getElementById('citas-encontradas');
+    const ultimaActualizacionEl = document.getElementById('ultima-actualizacion');
+
+    /**
+     * Format date for display
+     */
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    /**
+     * Load citas from API
+     */
+    async function loadCitas() {
+        if (!calendarioList) return;
+
+        try {
+            // Load stats
+            const statsResponse = await fetch(API_ESTADISTICAS);
+            if (statsResponse.ok) {
+                const stats = await statsResponse.json();
+                totalChecksEl.textContent = stats.total_comprobaciones || 0;
+                citasEncontradasEl.textContent = stats.citas_encontradas || 0;
+
+                if (stats.ultima_actualizacion) {
+                    ultimaActualizacionEl.textContent = formatDate(stats.ultima_actualizacion);
+                }
+            }
+
+            // Load citas
+            const response = await fetch(API_CITAS);
+            if (!response.ok) {
+                throw new Error('Error loading citas');
+            }
+
+            const citas = await response.json();
+
+            calendarioLoading.hidden = true;
+
+            if (!citas || citas.length === 0) {
+                calendarioEmpty.hidden = false;
+                return;
+            }
+
+            // Show list
+            citasList.hidden = false;
+
+            // Generate HTML for each cita
+            citasList.innerHTML = citas.map(function(cita) {
+                const badgeClass = cita.hay_citas ? 'disponible' : 'no-disponible';
+                const badgeText = cita.hay_citas ? 'Citas disponibles' : 'Sin citas';
+                const iconColor = cita.hay_citas ? '#10B981' : '#9CA3AF';
+
+                return '<div class="cita-item ' + (cita.hay_citas ? '' : 'sin-citas') + '">' +
+                    '<div class="cita-icon">' +
+                    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none">' +
+                    '<circle cx="12" cy="12" r="10" stroke="' + iconColor + '" stroke-width="2"/>' +
+                    '<path d="M12 6v6l4 2" stroke="' + iconColor + '" stroke-width="2" stroke-linecap="round"/>' +
+                    '</svg>' +
+                    '</div>' +
+                    '<div class="cita-content">' +
+                    '<div class="cita-fecha">' + formatDate(cita.checked_at) + '</div>' +
+                    '<div class="cita-detalles">' + (cita.detalles || 'Sin detalles') + '</div>' +
+                    '</div>' +
+                    '<span class="cita-badge ' + badgeClass + '">' + badgeText + '</span>' +
+                    '</div>';
+            }).join('');
+
+        } catch (error) {
+            console.error('Error loading citas:', error);
+            calendarioLoading.hidden = true;
+            calendarioEmpty.hidden = false;
+        }
+    }
+
+    // Load citas on page load if element exists
+    if (calendarioList) {
+        loadCitas();
+
+        // Refresh button
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', function() {
+                calendarioLoading.hidden = false;
+                calendarioEmpty.hidden = true;
+                citasList.hidden = true;
+                loadCitas();
+            });
+        }
+    }
 
 })();

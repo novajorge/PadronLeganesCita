@@ -25,6 +25,11 @@
                 </svg>
                 <span class="logo-text">Padrón Leganés</span>
             </div>
+            <nav class="nav-menu">
+                <a href="/" class="nav-link">Inicio</a>
+                <a href="#registro" class="nav-link">Notifícame una cita</a>
+                <a href="#calendario" class="nav-link">Ver calendario</a>
+            </nav>
         </div>
     </header>
 
@@ -86,6 +91,58 @@
                     </div>
                     <h3 class="feature-title">Recibe alertas</h3>
                     <p class="feature-description">Te notificamos al instante por tu canal preferido cuando haya citas disponibles</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calendario Section -->
+    <section class="calendario" id="calendario">
+        <div class="container">
+            <h2 class="section-title">Citas Disponibles</h2>
+            <p class="section-subtitle">Historial de comprobaciones de citas</p>
+
+            <div class="calendario-card">
+                <div class="calendario-header">
+                    <div class="calendario-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="total-checks">0</span>
+                            <span class="stat-label">Total comprobaciones</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="citas-encontradas">0</span>
+                            <span class="stat-label">Citas encontradas</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="ultima-actualizacion">-</span>
+                            <span class="stat-label">Última actualización</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" id="refresh-calendar">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M2 8a6 6 0 0111.464-2.464M14 8A6 6 0 012.536 10.464" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M14 2v4h-4M2 14v-4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Actualizar
+                    </button>
+                </div>
+
+                <div class="calendario-list" id="calendario-list">
+                    <div class="loading-spinner" id="calendario-loading">
+                        <svg class="spinner" width="32" height="32" viewBox="0 0 32 32">
+                            <circle cx="16" cy="16" r="12" stroke="#0059A8" stroke-width="3" fill="none" stroke-dasharray="60" stroke-dashoffset="20"/>
+                        </svg>
+                        <p>Cargando citas...</p>
+                    </div>
+                    <div class="empty-state" id="calendario-empty" hidden>
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                            <circle cx="32" cy="32" r="28" stroke="#9CA3AF" stroke-width="3"/>
+                            <path d="M24 28v8M32 28v8M40 28v8M24 40h16" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                        <p>No se han encontrado citas aún</p>
+                        <span>El sistema monitoriza constantemente la web del ayuntamiento</span>
+                    </div>
+                    <div class="citas-list" id="citas-list" hidden></div>
                 </div>
             </div>
         </div>
