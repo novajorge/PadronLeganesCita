@@ -43,31 +43,52 @@ def verificar_citas():
 
     try:
         # Verificar disponibilidad
-        resultado = scraper.verificar_disponibilidad()
+        resultado = scraper.verificar_todas_las_citas(dias_anticipacion=60)
+
+        # Contar total de citas encontradas
+        total_citas = 0
+        todas_las_citas = []
+
+        for unidad in resultado.get("unidades", []):
+            citas = unidad.get("citas_encontradas", [])
+            total_citas += len(citas)
+            todas_las_citas.extend(citas)
+
+        hay_citas = total_citas > 0
 
         # Guardar en base de datos
         db = SessionLocal()
         try:
-            registro = CitaDisponibilidad(
-                hay_citas=resultado["hay_citas"],
-                detalles=str(resultado.get("detalles", [])),
+            # Guardar cada cita encontrada
+            for cita in todas_las_citas:
+                registro = CitaDisponibilidad(
+                    hay_citas=True,
+                    detalles=f"{cita['fecha']} {cita['hora']} - {cita.get('unidad', 'Padrón')}",
+                    checked_at=datetime.utcnow()
+                )
+                db.add(registro)
+
+            # También guardar un registro resumen
+            registro_resumen = CitaDisponibilidad(
+                hay_citas=hay_citas,
+                detalles=f"Total: {total_citas} citas en {len(resultado.get('unidades', []))} unidades",
                 checked_at=datetime.utcnow()
             )
-            db.add(registro)
+            db.add(registro_resumen)
             db.commit()
         finally:
             db.close()
 
         # Si hay citas y no se habían notificado antes, notificar a todos los usuarios
-        if resultado["hay_citas"] and not ultima_disponibilidad:
-            logger.info("¡Citas detectadas! Notificando a usuarios...")
-            notificar_todos_usuarios(resultado)
+        if hay_citas and not ultima_disponibilidad:
+            logger.info(f"¡{total_citas} citas detectadas! Notificando a usuarios...")
+            notificar_todos_usuarios(resultado, todas_las_citas)
             ultima_disponibilidad = datetime.now(tz)
-        elif not resultado["hay_citas"]:
+        elif not hay_citas:
             # Resetear si no hay citas
             ultima_disponibilidad = None
 
-        logger.info(f"Resultado: {resultado}")
+        logger.info(f"Total citas encontradas: {total_citas}")
 
     except Exception as e:
         logger.error(f"Error en verificación: {e}")
@@ -75,7 +96,7 @@ def verificar_citas():
         scraper.cerrar()
 
 
-def notificar_todos_usuarios(resultado: dict):
+def notificar_todos_usuarios(resultado: dict, todas_las_citas: list):
     """Notifica a todos los usuarios activos"""
     db = SessionLocal()
     try:
@@ -94,10 +115,12 @@ def notificar_todos_usuarios(resultado: dict):
                     "notify_whatsapp": usuario.notify_whatsapp
                 }
 
+                hay_citas = len(todas_las_citas) > 0
+
                 resultados = notificador.notificar_usuario(
                     usuario_dict,
-                    resultado["hay_citas"],
-                    resultado.get("detalles", [])
+                    hay_citas,
+                    todas_las_citas
                 )
 
                 logger.info(f"Usuario {usuario.nombre}: {resultados}")

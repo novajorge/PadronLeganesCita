@@ -118,11 +118,11 @@ class Notificador:
             logger.error(f"Error enviando SMS: {e}")
             return False
 
-    def notificar_usuario(self, usuario: dict, hay_citas: bool, detalles: list) -> dict:
+    def notificar_usuario(self, usuario: dict, hay_citas: bool, citas: list) -> dict:
         """Notifica a un usuario por todos los canales activos"""
         if hay_citas:
             asunto = "🚨 ¡Citas disponibles! - Padrón Leganés"
-            mensaje = self._generar_mensaje_citas(detalles)
+            mensaje = self._generar_mensaje_citas(citas)
         else:
             return {"status": "no_hay_citas", "enviados": 0}
 
@@ -156,8 +156,19 @@ class Notificador:
 
         return resultados
 
-    def _generar_mensaje_citas(self, detalles: list) -> str:
+    def _generar_mensaje_citas(self, citas: list) -> str:
         """Genera el mensaje de notificación de citas"""
+        # Agrupar citas por fecha
+        citas_por_fecha = {}
+        for cita in citas:
+            fecha = cita.get("fecha", "Sin fecha")
+            hora = cita.get("hora", "")
+            unidad = cita.get("unidad", "Padrón")
+
+            if fecha not in citas_por_fecha:
+                citas_por_fecha[fecha] = []
+            citas_por_fecha[fecha].append(f"{hora} ({unidad})")
+
         mensaje = """
         <html>
         <body>
@@ -165,11 +176,16 @@ class Notificador:
             <p>Se han detectado citas disponibles para <b>Padrón</b> en la Casa del Reloj de Leganés.</p>
         """
 
-        if detalles:
-            mensaje += "<h3>Detalles:</h3><ul>"
-            for d in detalles:
-                mensaje += f"<li>{d}</li>"
+        if citas_por_fecha:
+            mensaje += "<h3>Citas disponibles:</h3><ul>"
+            for fecha, horas in sorted(citas_por_fecha.items()):
+                mensaje += f"<li><b>{fecha}</b>: {', '.join(horas)}</li>"
             mensaje += "</ul>"
+
+        # Limitar a las primeras 20 citas para no exceder límites
+        total_citas = len(citas)
+        if total_citas > 20:
+            mensaje += f"<p><i>... y {total_citas - 20} citas más.</i></p>"
 
         mensaje += """
             <p>Accede ahora: <a href="https://intraweb.leganes.org/CitaPrevia/">Cita Previa Leganés</a></p>
