@@ -1028,8 +1028,30 @@ body {
 }
 
 .calendar-header {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
     margin-bottom: var(--space-lg);
+}
+
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--color-primary-light);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--color-primary);
+    transition: all var(--transition-fast);
+}
+
+.calendar-nav:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
 }
 
 .calendar-title {

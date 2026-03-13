@@ -411,6 +411,10 @@
     const citasList = document.getElementById('citas-list');
     const refreshBtn = document.getElementById('refresh-calendar');
 
+    // Calendar navigation state
+    let currentMonthOffset = 0;
+    const TOTAL_MONTHS = 3;
+
     // Elements for stats
     const totalChecksEl = document.getElementById('total-checks');
     const citasEncontradasEl = document.getElementById('citas-encontradas');
@@ -433,7 +437,7 @@
     /**
      * Generate calendar grid for a month
      */
-    function generateCalendarGrid(year, month, citasMap) {
+    function generateCalendarGrid(year, month, citasMap, showArrows) {
         const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         const dayNames = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'];
 
@@ -445,7 +449,22 @@
 
         let html = '<div class="calendar-month">';
         html += '<div class="calendar-header">';
+
+        // Navigation arrows
+        if (showArrows) {
+            html += '<button class="calendar-nav calendar-nav-prev" onclick="changeMonth(-1)" aria-label="Mes anterior">';
+            html += '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12 15l-5-5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            html += '</button>';
+        }
+
         html += '<h3 class="calendar-title">' + monthNames[month] + ' ' + year + '</h3>';
+
+        if (showArrows) {
+            html += '<button class="calendar-nav calendar-nav-next" onclick="changeMonth(1)" aria-label="Mes siguiente">';
+            html += '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M8 5l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            html += '</button>';
+        }
+
         html += '</div>';
 
         // Day names
@@ -552,21 +571,25 @@
                 }
             });
 
-            // Generate calendar for current and next month
+            // Generate calendars for current and next months with navigation
             const now = new Date();
             const currentYear = now.getFullYear();
             const currentMonth = now.getMonth();
 
             let calendarHtml = '';
 
-            // Current month
-            calendarHtml += generateCalendarGrid(currentYear, currentMonth, citasMap);
+            // Generate 3 months with navigation arrows on first one
+            for (let i = 0; i < TOTAL_MONTHS; i++) {
+                const monthIndex = (currentMonth + i) % 12;
+                const yearIndex = currentMonth + i >= 12 ? currentYear + 1 : currentYear;
+                calendarHtml += generateCalendarGrid(yearIndex, monthIndex, citasMap, i === 0);
+            }
 
-            // Next month
-            const nextMonth = currentMonth + 1;
-            const nextYear = currentMonth === 11 ? currentYear + 1 : currentYear;
-            const actualNextMonth = currentMonth === 11 ? 0 : nextMonth;
-            calendarHtml += generateCalendarGrid(nextYear, actualNextMonth, citasMap);
+            // Add navigation function
+            window.changeMonth = function(delta) {
+                currentMonthOffset += delta;
+                renderCalendars(citasMap);
+            };
 
             citasList.innerHTML = '<div class="calendarios-container">' + calendarHtml + '</div>';
 
@@ -575,6 +598,27 @@
             calendarioLoading.hidden = true;
             calendarioEmpty.hidden = false;
         }
+    }
+
+    /**
+     * Render calendars with current offset
+     */
+    function renderCalendars(citasMap) {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+
+        let calendarHtml = '';
+        const startOffset = currentMonthOffset;
+
+        for (let i = 0; i < TOTAL_MONTHS; i++) {
+            const offset = startOffset + i;
+            const monthIndex = (currentMonth + offset) % 12;
+            let yearIndex = currentYear + Math.floor((currentMonth + offset) / 12);
+            calendarHtml += generateCalendarGrid(yearIndex, monthIndex, citasMap, i === 0 && startOffset === 0);
+        }
+
+        citasList.innerHTML = '<div class="calendarios-container">' + calendarHtml + '</div>';
     }
 
     // Load citas on page load if element exists
